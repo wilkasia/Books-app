@@ -20,7 +20,6 @@ def get_db():
             port=13306,
             database='booksapp'
         )
-        # g.db.row
 
     return g.db
 
@@ -52,11 +51,3 @@ def init_db_command():
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
-
-
-# import mysql.connector
-#
-# cnx = mysql.connector.connect(user='scott', password='password',
-#                               host='127.0.0.1',
-#                               database='employees')
-# cnx.close()

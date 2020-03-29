@@ -54,7 +54,7 @@ def login():
         error = None
         cursor = db.cursor(dictionary=True)
         cursor.execute(
-            "SELECT * FROM user WHERE username = %s", (username,)
+            'SELECT * FROM user WHERE username = %s', (username,)
         )
         user = cursor.fetchone()
         cursor.close()
@@ -81,9 +81,6 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        # g.user = get_db().execute(
-        #     'SELECT * FROM user WHERE id = ?', (user_id,)
-        # ).fetchone()
         cursor = get_db().cursor(dictionary=True)
         cursor.execute(
             'SELECT * FROM user WHERE id = %s', (user_id,)
