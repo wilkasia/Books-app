@@ -1,26 +1,68 @@
-<!doctype html>
-<title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Demo: Layout with Dijit</title>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dijit/themes/claro/claro.css" media="screen">
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js" data-dojo-config="async:true, parseOnLoad:true"></script>
+</head>
+<body>
+<div class="ba-main-container">
+    <div class="ba-header">
+        <table style="width:100%;">
+            <tr>
+                <td style="width: 20%;"><a style="text-decoration: none; font-size: 20px; font-weight: bold; color: #3A7734;" href="{{ url_for('index') }}">Aplikacja BOOKS</a></td>
+                <td style="width: 80%; text-align: right;">
+                    {% if g.user %}
+                        <i class="fa fa-user-o fa-lg" aria-hidden="true"></i>
+                        <span style="margin-right: 15px;">{{ g.user['username'] }}</span>
+                        <a href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i></a>
+                    {% else %}
+                      <a href="{{ url_for('auth.register') }}">Register</a>
+                      <a href="{{ url_for('auth.login') }}">Log In</a>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="ba-menu vertical-menu">
+        <a href="{{ url_for('index') }}">
+            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+            <span>Posts</span>
+        </a>
+        {% if g.user %}
+            <a href="{{ url_for('blog.create') }}">
+                <i class="fa fa-font" aria-hidden="true"></i>
+                <span>New post</span>
+            </a>
+            <a href="#">
+                <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+                <span>Link ?</span>
+            </a>
+            <a href="#">
+                <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+                <span>Link ?</span>
+            </a>
+            <a href="{{ url_for('auth.logout') }}">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                <span>Logout</span>
+            </a>
+        {% endif %}
+    </div>
+    <div class="ba-main">
+        <section class="content">
+          <header>
+            {% block header %}{% endblock %}
+          </header>
+          {% for message in get_flashed_messages() %}
+            <div class="alert alert-danger">{{ message }}</div>
+          {% endfor %}
+          {% block content %}{% endblock %}
+        </section>
+    </div>
+</div>
 <script type=text/javascript src="{{url_for('static', filename='js.js') }}"></script>
-<nav>
-  <h1>Flaskr</h1>
-  <ul>
-    {% if g.user %}
-      <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
-      <li><a href="{{ url_for('auth.logout') }}">Search</a>
-    {% else %}
-      <li><a href="{{ url_for('auth.register') }}">Register</a>
-      <li><a href="{{ url_for('auth.login') }}">Log In</a>
-    {% endif %}
-  </ul>
-</nav>
-<section class="content">
-  <header>
-    {% block header %}{% endblock %}
-  </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
-</section>
+</body>
+</html>
