@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block header %}
+    <h2>{% block title %}My books{% endblock %}</h2>
+{% endblock %}
+
+{% block content %}
+    {% for book in books %}
+        <article class="book">
+            <h2>{{ book['title'] }}</h2>
+            <p class="author">{{ book['author'] }}</p>
+            <p class="rent_date">Rent date: {{ book['rent_date'] }}</p>
+            {% if 'return_date' in book %}
+                <p class="return_date">Return date: {{ book['return_date'] }}</p>
+            {% endif %}
+        </article>
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

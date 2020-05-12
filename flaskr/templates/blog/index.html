@@ -12,12 +12,10 @@
     <article class="post">
       <header>
         <div>
-{#          <h1>{{ g.user }}</h1>#}
-{#          <h1>{{ post['title'] }}</h1>#}
           <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
         </div>
         {% if g.user['id'] == post['author_id'] %}
-          <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
+          <a class="edit-message" href="javascript:void(0)" data-id="{{ post['id'] }}">Edit</a>
         {% endif %}
       </header>
       <p class="body">{{ post['body'] }}</p>
@@ -26,4 +24,5 @@
       <hr>
     {% endif %}
   {% endfor %}
+    <script type=text/javascript src="{{url_for('static', filename='blog.js') }}"></script>
 {% endblock %}

@@ -39,7 +39,8 @@ def create():
             db = get_db()
             cursor = db.cursor(dictionary=True)
             cursor.execute(
-                "INSERT INTO post (title, body, author_id) VALUES (%s, %s, %s)",
+                "INSERT INTO post (title, body, author_id) "
+                "VALUES (%s, %s, %s)",
                 (title, body, g.user['id'])
             )
             db.commit()
@@ -97,10 +98,11 @@ def update(id):
             db.commit()
             return redirect(url_for('blog.index'))
 
-    return render_template('blog/update.html', post=post)
+    # return render_template('blog/update.html', post=post)
+    return post
 
 
-@bp.route('/<int:id>/delete', methods=('POST',))
+@bp.route('/<int:id>/delete', methods=('GET', 'POST'))
 @login_required
 def delete(id):
     get_post(id)

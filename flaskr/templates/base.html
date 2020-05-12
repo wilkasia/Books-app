@@ -14,7 +14,11 @@
     <div class="ba-header">
         <table style="width:100%;">
             <tr>
-                <td style="width: 20%;"><a style="text-decoration: none; font-size: 20px; font-weight: bold; color: #3A7734;" href="{{ url_for('index') }}">Aplikacja BOOKS</a></td>
+                <td style="width: 20%;">
+                    <a style="text-decoration: none; font-size: 20px; font-weight: bold; color: #3A7734;" href="{{ url_for('index') }}">
+                        <img src="{{ url_for('static', filename='logo.png') }}" alt="" height="50" width="262">
+                    </a>
+                </td>
                 <td style="width: 80%; text-align: right;">
                     {% if g.user %}
                         <i class="fa fa-user-o fa-lg" aria-hidden="true"></i>
@@ -34,17 +38,27 @@
             <span>Posts</span>
         </a>
         {% if g.user %}
-            <a href="{{ url_for('blog.create') }}">
-                <i class="fa fa-font" aria-hidden="true"></i>
-                <span>New post</span>
+            {% if g.user['type'] == 2 %}
+                <a href="{{ url_for('blog.create') }}">
+                    <i class="fa fa-font" aria-hidden="true"></i>
+                    <span>New post</span>
+                </a>
+                <a href="{{ url_for('books.add_book') }}">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <span>Add book</span>
+                </a>
+            {% endif %}
+            <a href="{{ url_for('books.all_books') }}">
+                <i class="fa fa-book" aria-hidden="true"></i>
+                <span>All books</span>
             </a>
-            <a href="#">
-                <i class="fa fa-question-circle-o" aria-hidden="true"></i>
-                <span>Link ?</span>
+            <a href="{{ url_for('books.user_books') }}">
+                <i class="fa fa-address-book" aria-hidden="true"></i>
+                <span>My books</span>
             </a>
-            <a href="#">
-                <i class="fa fa-question-circle-o" aria-hidden="true"></i>
-                <span>Link ?</span>
+            <a href="{{ url_for('books.history') }}">
+                <i class="fa fa-history" aria-hidden="true"></i>
+                <span>History</span>
             </a>
             <a href="{{ url_for('auth.logout') }}">
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
@@ -53,7 +67,7 @@
         {% endif %}
     </div>
     <div class="ba-main">
-        <section class="content">
+        <section id="main-content" class="content">
           <header>
             {% block header %}{% endblock %}
           </header>

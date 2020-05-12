@@ -1,7 +1,6 @@
 .ba-header {
     grid-area: header;
-    padding: 18px;
-
+    padding: 0 10px 0 10px;
 }
 
 .ba-menu {

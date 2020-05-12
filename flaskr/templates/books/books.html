@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block header %}
+  <h2>{% block title %}All books{% endblock %}</h2>
+  {% if g.user and g.user['type'] == 2  %}
+    <a class="action" href="">Add book</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for book in books %}
+    <article class="book">
+      <header>
+        <div>
+            <div class="title">{{ book['title'] }}</div>
+        </div>
+      </header>
+      <p  class="author">{{ book['author'] }}</p>
+      <p class="description">{{ book['description'] }}</p>
+    {% if g.user and book['status'] == 1%}
+          <a class="action" href="{{ url_for('books.borrow', book_id=book['id']) }}">Borrow</a>
+    {% endif %}
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
