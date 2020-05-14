@@ -1,28 +1,21 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h2>{% block title %}Posts{% endblock %}</h2>
-  {% if g.user and g.user['type'] == 2  %}
-    <a class="action" href="{{ url_for('blog.create') }}">New</a>
-  {% endif %}
+    <h1 style="margin-bottom: 15px">{% block title %}Posts{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-  {% for post in posts %}
-    <article class="post">
-      <header>
-        <div>
-          <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
-        </div>
-        {% if g.user['id'] == post['author_id'] %}
-          <a class="edit-message" href="javascript:void(0)" data-id="{{ post['id'] }}">Edit</a>
+    {% for post in posts %}
+        <article class="post">
+            <h2>{{ post['title'] }}</h2>
+            <p>by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</p>
+            {% if g.user['id'] == post['author_id'] %}
+                <a style="font-size: 1rem" class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
+            {% endif %}
+            <p class="body">{{ post['body'] }}</p>
+        </article>
+        {% if not loop.last %}
+            <hr>
         {% endif %}
-      </header>
-      <p class="body">{{ post['body'] }}</p>
-    </article>
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
-  {% endfor %}
-    <script type=text/javascript src="{{url_for('static', filename='blog.js') }}"></script>
+    {% endfor %}
 {% endblock %}

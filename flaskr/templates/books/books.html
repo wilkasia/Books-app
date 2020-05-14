@@ -1,27 +1,41 @@
 {% extends 'base.html' %}
 {% block header %}
-  <h2>{% block title %}All books{% endblock %}</h2>
-  {% if g.user and g.user['type'] == 2  %}
-    <a class="action" href="">Add book</a>
-  {% endif %}
+    <h2 style="margin-bottom: 15px">{% block title %}Available books{% endblock %}</h2>
 {% endblock %}
 
 {% block content %}
-  {% for book in books %}
-    <article class="book">
-      <header>
-        <div>
-            <div class="title">{{ book['title'] }}</div>
-        </div>
-      </header>
-      <p  class="author">{{ book['author'] }}</p>
-      <p class="description">{{ book['description'] }}</p>
-    {% if g.user and book['status'] == 1%}
-          <a class="action" href="{{ url_for('books.borrow', book_id=book['id']) }}">Borrow</a>
-    {% endif %}
-    </article>
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
-  {% endfor %}
+    {% for book in books %}
+        <article class="book">
+            <h2>{{ book['title'] }}</h2>
+            <p>{{ book['author'] }}</p>
+            <p>{{ book['description'] }}</p>
+
+            {% if g.user ['type'] == 1 %}
+                {% if book['status'] == 1 %}
+                    <a class="action" href="{{ url_for('books.borrow', book_id=book['id']) }}"
+                       style="font-size: 1rem"><i
+                            class="fa fa-arrow-right" aria-hidden="true"></i><span> Borrow</span></a>
+                {% else %}
+                    <span class="text"
+                       style="font-size: 1rem"><i
+                            class="fa fa-arrow-right" aria-hidden="true"></i><span> Borrow</span></span>
+                {% endif %}
+            {% endif %}
+
+            {% if g.user['type'] == 2 %}
+                {% if book['status'] == 1 %}
+                    <a class="action" href="{{ url_for('books.borrow', book_id=book['id']) }}"
+                       style="font-size: 1rem"><i
+                            class="fa fa-arrow-right" aria-hidden="true"></i><span> Borrow</span></a>
+                {% else %}
+                    <span class="text"  style="font-size: 1rem"><i class="fa fa-arrow-right" aria-hidden="true"></i><span> Borrow</span></span>
+                {% endif %}
+                <a class="action" href="{{ url_for('books.edit', book_id=book['id']) }}" style="font-size: 1rem; margin-left: 15px"><i class="fa fa-edit" aria-hidden="true"></i><span> Edit book</span></a>
+            {% endif %}
+
+        </article>
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
 {% endblock %}

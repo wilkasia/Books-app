@@ -11,8 +11,6 @@ bp = Blueprint('books', __name__)
 @bp.route('/books', methods=('GET', 'POST'))
 def all_books():
     books = get_all_books()
-    print(books)
-    print('before render')
     return render_template('books/books.html', books=books)
 
 
@@ -71,6 +69,29 @@ def borrow(book_id):
     return redirect(url_for('books.all_books'))
 
 
+@bp.route('/<int:user_book_id>/<int:book_id>/return', methods=('GET', 'POST'))
+@login_required
+def return_book(user_book_id, book_id):
+
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute(
+        "UPDATE user_books SET return_date=%s WHERE id=%s",
+        (datetime.now(), user_book_id)
+    )
+    db.commit()
+
+    cursor.execute(
+        "UPDATE books SET status=1 WHERE id=%s",
+        (book_id,)
+    )
+    db.commit()
+    cursor.close()
+
+    return redirect(url_for('books.user_books'))
+
+
 def get_all_books():
     db = get_db()
     cursor = db.cursor(dictionary=True)
@@ -105,12 +126,14 @@ def user_books():
     cursor = db.cursor(dictionary=True)
 
     cursor.execute(
-        "SELECT ub.rent_date, b.author, b.title FROM user_books ub "
-        "LEFT JOIN books b ON ub.book_id = b.id WHERE user_id = %s AND return_date IS NULL",
+        "SELECT ub.id, ub.book_id, ub.rent_date, b.author, b.title FROM user_books ub "
+        "LEFT JOIN books b ON ub.book_id = b.id WHERE user_id = %s AND return_date IS NULL "
+        "ORDER BY rent_date DESC",
         (g.user['id'],)
     )
 
     books = cursor.fetchall()
+    print(books)
     cursor.close()
     return render_template('books/user_books.html', books=books)
 
@@ -123,10 +146,57 @@ def history():
 
     cursor.execute(
         "SELECT ub.rent_date, ub.return_date, b.author, b.title FROM user_books ub "
-        "LEFT JOIN books b ON ub.book_id = b.id WHERE user_id = %s AND return_date IS NOT NULL",
+        "LEFT JOIN books b ON ub.book_id = b.id WHERE user_id = %s AND return_date IS NOT NULL "
+        "ORDER BY return_date DESC",
         (g.user['id'],)
     )
 
     books = cursor.fetchall()
     cursor.close()
-    return render_template('books/user_books.html', books=books)
+    return render_template('books/history.html', books=books)
+
+
+@bp.route('/<int:book_id>/edit', methods=('GET', 'POST'))
+@login_required
+def edit(book_id):
+    book = get_book(book_id)
+
+    if request.method == 'POST':
+        author = request.form['author']
+        title = request.form['title']
+        description = request.form['description']
+        error = None
+
+        if not title:
+            error = 'Title is required.'
+
+        if not author:
+            error = 'Author is required.'
+
+        if error is not None:
+            flash(error)
+        else:
+            db = get_db()
+            cursor = db.cursor(dictionary=True)
+            cursor.execute(
+                'UPDATE books SET author = %s, title = %s, description = %s'
+                ' WHERE id = %s',
+                (author, title, description, book_id)
+            )
+            cursor.close()
+            db.commit()
+            return redirect(url_for('books.all_books'))
+
+    return render_template('books/edit.html', book=book)
+
+
+@bp.route('/<int:book_id>/delete_book', methods=('GET', 'POST'))
+@login_required
+def delete_book(book_id):
+    get_book(book_id)
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute('DELETE FROM books WHERE id = %s', (book_id,))
+    cursor.close()
+    db.commit()
+    return redirect(url_for('books.all_books'))

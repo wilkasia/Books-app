@@ -56,3 +56,42 @@
 .vertical-menu span {
     margin-left: 10px;
 }
+
+.book {
+    margin: .5rem;
+    padding: .3rem;
+    font-size: 1.2rem;
+    background-color: #eee;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.book > h2{
+    margin: .2rem;
+    font-size: 1.2rem;
+}
+
+.book > p {
+    margin: .3rem;
+    font-size: 1rem;
+}
+
+.post {
+    margin: .5rem;
+    padding: .3rem;
+    font-size: 1.2rem;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border: solid lightgray 1px;
+}
+
+.post > h2{
+    margin: .3rem;
+    font-size: 1.2rem;
+}
+
+.post > p {
+    margin: .3rem;
+    font-size: 1rem;
+}

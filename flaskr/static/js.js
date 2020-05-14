@@ -17,5 +17,10 @@ require([
                 domClass.remove(node,'active');
             }
         });
+
+        // query('#del-post').on('click',function () {
+        //     confirm('Are you sure?');
+        //
+        // })
     });
 });

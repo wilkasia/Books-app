@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h3>{% block title %}Add book{% endblock %}</h3>
+{% endblock %}
+
+{% block content %}
+    <form style="width: 70%;" method="post">
+        <div class="form-group">
+            <label for="author">Author</label>
+            <input class="form-control" name="author" id="author" value="{{ request.form['author'] or book['author'] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input class="form-control" name="title" id="title" value="{{ request.form['title'] or book['title']}}" required>
+        </div>
+        <div class="form-group">
+            <label for="body">Description</label>
+            <textarea class="form-control" rows="6" name="description" id="description">{{ request.form['description'] or book['description']}}</textarea>
+        </div>
+        <div class="form-group">
+            <input class="btn btn-success" type="submit" value="Save">
+            <a class="btn btn-danger" href="{{ url_for('books.delete_book', book_id=book['id']) }}" role="button" onclick="return confirm('Are you sure?');">Delete</a>
+        </div>
+    </form>
+{% endblock %}

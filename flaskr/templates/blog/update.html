@@ -1,9 +1,11 @@
+{% extends 'base.html' %}
+
 {% block header %}
-    <h3>{% block title %}Edit "{{ post['title'] }}"{% endblock %}</h3>
+  <h1>{% block title %}Edit "{{ post['title'] }}"{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-    <form style="width: 70%;" method="post" action="{{ url_for('blog.update', id=post['id']) }}">
+  <form style="width: 70%;" method="post">
         <div class="form-group">
             <label for="title">Title</label>
             <input class="form-control" name="title" id="title" value="{{ request.form['title'] or post['title'] }}" required>
@@ -14,7 +16,7 @@
         </div>
         <div class="form-group">
             <input class="btn btn-success" type="submit" value="Save">
-            <a class="btn btn-danger" href="{{ url_for('blog.delete', id=post['id']) }}" role="button">Delete</a>
+            <a id="del-post" class="btn btn-danger" href="{{ url_for('blog.delete', id=post['id']) }}" role="button" title="Usunięcie postu" onclick="return confirm('Are you sure?');">Delete</a>
         </div>
     </form>
 {% endblock %}
